@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "923936224716",
+    "project_id": "user-login-authentication-flow",
+    "storage_bucket": "user-login-authentication-flow.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:923936224716:android:e4a2f9c363d8a778d65969",
+        "android_client_info": {
+          "package_name": "com.user_login_authentication_flow_firebase.userloginauthenticationflow"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYTIDnOaSpzd7Vp12Quo0l-gyEN3Hzu-s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
