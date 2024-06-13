@@ -7,6 +7,23 @@
     <string name="last_name">Last Name</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
+    <string name="hide_password">Hide password</string>
+    <string name="show_password">Show password</string>
+    <string name="terms_and_condition">By Continuing you accept our privacy and policy Term of Use</string>
+    <string name="terms_and_condition_header">Terms of use</string>
+    <string name="register">Register</string>
+    <string name="login">Login</string>
+    <string name="or">or</string>
+    <string name="forgot_password">Forgot your password?</string>
+
+
+
+
+
+
+
+
+
 
 
 
