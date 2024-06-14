@@ -70,7 +70,7 @@ fun SignUpScreen(loginViewModel: LoginViewModel = viewModel()){
 
             ButtonComponent(value = stringResource(id = R.string.register), onButtonClicked = {
                 loginViewModel.onEvent(UiEvent.Register)
-            })
+            }, isEnabled = loginViewModel.allValidationsPassed.value)
 
             Spacer(modifier = Modifier.height(20.dp))
 

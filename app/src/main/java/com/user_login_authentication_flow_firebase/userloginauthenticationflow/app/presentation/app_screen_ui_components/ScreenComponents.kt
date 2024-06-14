@@ -267,7 +267,7 @@ fun ClickableTextComponent(onTextSelected: (String) -> Unit) {
         }
 
 @Composable
-fun ButtonComponent(value: String, onButtonClicked: () -> Unit){
+fun ButtonComponent(value: String, onButtonClicked: () -> Unit, isEnabled: Boolean){
     Button(
         onClick = {
                   onButtonClicked.invoke()
@@ -276,7 +276,8 @@ fun ButtonComponent(value: String, onButtonClicked: () -> Unit){
             .fillMaxWidth()
             .heightIn(48.dp),
         contentPadding = PaddingValues(),
-        colors = ButtonDefaults.buttonColors(Color.Transparent)
+        colors = ButtonDefaults.buttonColors(Color.Transparent),
+        enabled = isEnabled
     ) {
 
         Box(

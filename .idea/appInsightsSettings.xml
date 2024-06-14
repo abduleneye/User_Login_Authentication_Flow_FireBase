@@ -27,10 +27,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.user_login_authentication_flow_firebase.userloginauthenticationflow" />
+                  <option name="mobileSdkAppId" value="1:923936224716:android:e4a2f9c363d8a778d65969" />
+                  <option name="projectId" value="user-login-authentication-flow" />
+                  <option name="projectNumber" value="923936224716" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

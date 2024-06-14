@@ -3,6 +3,7 @@ package com.user_login_authentication_flow_firebase.userloginauthenticationflow.
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import com.google.firebase.auth.FirebaseAuth
 import com.user_login_authentication_flow_firebase.userloginauthenticationflow.app.presentation.rules.Validator
 import com.user_login_authentication_flow_firebase.userloginauthenticationflow.app.presentation.ui_events.UiEvent
 import com.user_login_authentication_flow_firebase.userloginauthenticationflow.app.presentation.ui_states.RegistrationUiState
@@ -12,6 +13,8 @@ class LoginViewModel: ViewModel() {
     private val TAG = LoginViewModel::class.simpleName
 
     var registrationUiState = mutableStateOf(RegistrationUiState())
+
+    var allValidationsPassed = mutableStateOf(false)
 
     fun onEvent(event: UiEvent){
         validateDataWithRules()
@@ -83,6 +86,12 @@ class LoginViewModel: ViewModel() {
             passwordError = passwordResult.status
         )
 
+        if (fNameResult.status && lNameResult.status && emailResult.status && passwordResult.status){
+            allValidationsPassed.value = true
+        }else{
+            allValidationsPassed.value = false
+
+        }
 
 
 
@@ -99,6 +108,32 @@ class LoginViewModel: ViewModel() {
 
     private fun signUp(){
         Log.d(TAG, "Inside_signUp")
+        printState()
+        createUserInFireBase(
+            email = registrationUiState.value.email,
+            password = registrationUiState.value.password,
+        )
+
+    }
+
+    private fun createUserInFireBase(email: String, password: String){
+        FirebaseAuth
+            .getInstance()
+            .createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener{
+                Log.d(TAG, "Inside_OnCompleteListener")
+                Log.d(TAG, "${it.isSuccessful}")
+            }
+            .addOnFailureListener{
+                Log.d(TAG, "Inside_OnFailureListener")
+                Log.d(TAG, "${it.message}")
+                Log.d(TAG, "${it.localizedMessage}")
+
+
+            }
+
+
+
 
     }
 }
