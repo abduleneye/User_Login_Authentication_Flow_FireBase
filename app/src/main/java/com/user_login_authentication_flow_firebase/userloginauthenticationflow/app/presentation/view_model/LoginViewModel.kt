@@ -4,92 +4,80 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
+import com.user_login_authentication_flow_firebase.userloginauthenticationflow.app.core.navigation.PostOfficeAppRouter
+import com.user_login_authentication_flow_firebase.userloginauthenticationflow.app.core.navigation.Screen
 import com.user_login_authentication_flow_firebase.userloginauthenticationflow.app.presentation.rules.Validator
-import com.user_login_authentication_flow_firebase.userloginauthenticationflow.app.presentation.ui_events.UiEvent
-import com.user_login_authentication_flow_firebase.userloginauthenticationflow.app.presentation.ui_states.RegistrationUiState
+import com.user_login_authentication_flow_firebase.userloginauthenticationflow.app.presentation.screens.PostOfficeApp
+import com.user_login_authentication_flow_firebase.userloginauthenticationflow.app.presentation.ui_events.LoginUiEvent
+import com.user_login_authentication_flow_firebase.userloginauthenticationflow.app.presentation.ui_states.LoginUiState
+import com.user_login_authentication_flow_firebase.userloginauthenticationflow.app.presentation.ui_states.SignUpUiState
 
 class LoginViewModel: ViewModel() {
 
-    private val TAG = LoginViewModel::class.simpleName
+    val TAG = "Login_tag"
 
-    var registrationUiState = mutableStateOf(RegistrationUiState())
+    var loginUiState = mutableStateOf(LoginUiState())
 
-    var allValidationsPassed = mutableStateOf(false)
+    var allLoginValidationsPassed = mutableStateOf(false)
 
-    fun onEvent(event: UiEvent){
-        validateDataWithRules()
+    var loginInProgress = mutableStateOf(false)
+
+    fun onEvent(event: LoginUiEvent){
         when(event){
-            is UiEvent.FirstnameChanged -> {
-                registrationUiState.value = registrationUiState.value.copy(
-                    firstName = event.firstName
-                )
-                printState()
-            }
 
-            is UiEvent.EmailChanged -> {
-                registrationUiState.value = registrationUiState.value.copy(
-                    email = event.email
-                )
-                printState()
-
-            }
-            is UiEvent.LastnameChanged -> {
-                registrationUiState.value = registrationUiState.value.copy(
-                    lastName = event.lastName
-                )
-                printState()
-
-            }
-            is UiEvent.PasswordChanged -> {
-                registrationUiState.value = registrationUiState.value.copy(
+            is LoginUiEvent.PasswordChanged ->{
+                loginUiState.value = loginUiState.value.copy(
                     password = event.password
                 )
-                printState()
+            }
+            is LoginUiEvent.EmailChanged ->{
+                loginUiState.value = loginUiState.value.copy(
+                    email = event.email
+                )
 
             }
+            is LoginUiEvent.Login -> {
+                login()
+            }
 
-            UiEvent.Register -> {
-                signUp()
-                printState()
+            else -> {
 
-                validateDataWithRules()
             }
         }
 
+        validateLoginUiData()
     }
 
-    private fun validateDataWithRules(){
-        val fNameResult = Validator.validateFirstName(
-            fName = registrationUiState.value.firstName
-        )
-        val lNameResult = Validator.validateLastName(
-            lName = registrationUiState.value.lastName
-        )
+
+
+    private fun validateLoginUiData(){
+
         val emailResult = Validator.validateEmail(
-            email = registrationUiState.value.email
+            email = loginUiState.value.email
         )
 
         val passwordResult = Validator.validatePassword(
-            password = registrationUiState.value.password
+            password = loginUiState.value.password
         )
 
+
+
         Log.d(TAG, "Inside_validateDataWithRules")
-        Log.d(TAG, "fNameResult = ${fNameResult}")
-        Log.d(TAG, "lNameResult = ${lNameResult}")
+
         Log.d(TAG, "emailResult = ${emailResult}")
         Log.d(TAG, "passwordResult = ${passwordResult}")
 
-        registrationUiState.value = registrationUiState.value.copy(
-            firstNameError = fNameResult.status,
-            lastNameError = lNameResult.status,
+
+        loginUiState.value = loginUiState.value.copy(
+
             emailError = emailResult.status,
-            passwordError = passwordResult.status
+            passwordError = passwordResult.status,
         )
 
-        if (fNameResult.status && lNameResult.status && emailResult.status && passwordResult.status){
-            allValidationsPassed.value = true
+        if (emailResult.status && passwordResult.status){
+            allLoginValidationsPassed.value = true
         }else{
-            allValidationsPassed.value = false
+            allLoginValidationsPassed.value = false
 
         }
 
@@ -100,40 +88,33 @@ class LoginViewModel: ViewModel() {
 
     }
 
+    private fun login() {
+        loginInProgress.value = true
 
-    private fun printState(){
-        Log.d(TAG, "Inside_printState")
-        Log.d(TAG, registrationUiState.value.toString())
-    }
 
-    private fun signUp(){
-        Log.d(TAG, "Inside_signUp")
-        printState()
-        createUserInFireBase(
-            email = registrationUiState.value.email,
-            password = registrationUiState.value.password,
-        )
+        val email = loginUiState.value.email
+        val password = loginUiState.value.password
 
-    }
-
-    private fun createUserInFireBase(email: String, password: String){
         FirebaseAuth
             .getInstance()
-            .createUserWithEmailAndPassword(email, password)
+            .signInWithEmailAndPassword(email, password)
             .addOnCompleteListener{
-                Log.d(TAG, "Inside_OnCompleteListener")
-                Log.d(TAG, "${it.isSuccessful}")
+                Log.d(TAG, "Inside login success")
+                Log.d(TAG, "${it.isSuccessful }")
+
+                if(it.isSuccessful){
+                    loginInProgress.value = false
+                    PostOfficeAppRouter.navigateTo(Screen.HomeScreen)
+                }
+
             }
             .addOnFailureListener{
-                Log.d(TAG, "Inside_OnFailureListener")
+                Log.d(TAG, "Inside login failed")
                 Log.d(TAG, "${it.message}")
-                Log.d(TAG, "${it.localizedMessage}")
-
 
             }
-
-
-
-
     }
+
+
+
 }

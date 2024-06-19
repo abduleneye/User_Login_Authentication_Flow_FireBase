@@ -52,7 +52,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.user_login_authentication_flow_firebase.userloginauthenticationflow.R
-import com.user_login_authentication_flow_firebase.userloginauthenticationflow.app.presentation.ui_events.UiEvent
 import com.user_login_authentication_flow_firebase.userloginauthenticationflow.ui.theme.GrayColor
 import com.user_login_authentication_flow_firebase.userloginauthenticationflow.ui.theme.Purple40
 import com.user_login_authentication_flow_firebase.userloginauthenticationflow.ui.theme.TextColor
@@ -197,7 +196,7 @@ fun PasswordTextFieldComponent(labelValue: String, leadingIcon: Painter?, traili
 }
 
 @Composable
-fun CheckBoxComponent(onTextSelected: (String) -> Unit) {
+fun CheckBoxComponent(onTextSelected: (String) -> Unit, onCheckedChange: (Boolean) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -211,6 +210,7 @@ fun CheckBoxComponent(onTextSelected: (String) -> Unit) {
 
         Checkbox(checked = checkedState.value, onCheckedChange = {
             checkedState.value = !checkedState.value
+            onCheckedChange.invoke(it)
         })
 
        // NormalTextComponent(value = value)
@@ -267,7 +267,7 @@ fun ClickableTextComponent(onTextSelected: (String) -> Unit) {
         }
 
 @Composable
-fun ButtonComponent(value: String, onButtonClicked: () -> Unit, isEnabled: Boolean){
+fun ButtonComponent(value: String, onButtonClicked: () -> Unit, isEnabled: Boolean = false){
     Button(
         onClick = {
                   onButtonClicked.invoke()
@@ -343,7 +343,7 @@ fun DividerTextComponent(){
 fun ClickableLoginTextComponent(tryingToLogin: Boolean = true, onTextSelected: (String) -> Unit) {
 
     val initialText = if(tryingToLogin)"Already have an account? " else "Don't have an account yet?"
-    val loginText = if(tryingToLogin) "Login" else "Register"
+    val loginText = if(tryingToLogin) "Login" else "SignUp"
     val context = LocalContext.current
 
     val annotatedString = buildAnnotatedString {
@@ -360,7 +360,7 @@ fun ClickableLoginTextComponent(tryingToLogin: Boolean = true, onTextSelected: (
             .fillMaxWidth()
             .heightIn(min = 40.dp),
         style = TextStyle(
-            fontSize = 21.sp,
+            fontSize = 16.sp,
             fontWeight = FontWeight.Normal,
             fontStyle = FontStyle.Normal,
             textAlign = TextAlign.Center

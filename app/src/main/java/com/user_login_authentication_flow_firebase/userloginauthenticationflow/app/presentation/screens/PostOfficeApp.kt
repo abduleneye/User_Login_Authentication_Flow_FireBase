@@ -28,6 +28,10 @@ fun PostOfficeApp(){
                 is Screen.LoginScreen -> {
                     LoginScreen()
                 }
+
+                Screen.HomeScreen -> {
+                    HomeScreen()
+                }
             }
 
         }
